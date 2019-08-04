@@ -76,39 +76,41 @@ class ProjectList extends Component {
         )
     }
 
-    renderProjectList = (data) => {
-        //const slug = item.name.replace(/-|\s/g,"").toLowerCase()
-        const projectdata = data && data
-        console.log('data', Object.keys(projectdata))
-        const convertedArr = []
-        
-        const result = Object.values(projectdata);
-
-        const resultData = result.map(function(i) {
-            return [i, projectdata[i]];
-        });
+    renderProjectList = (item) => {
+        const slug = item.project_name
         return (
-            <div>
-                <div className='column'>
-                {result.map(function(data, key) {
-                    const resultdata = Object.values(data);
-                    {console.log('data', resultdata[0])}
-                    <div className='project-list' key={key}>
-                         <div className="project-overlay">
+            <div className='column'>
+                <div className='project-list'>
+                    <div className='gray-img'>
+                        <div className="image-wrapper">
+                            <img src={item.staticImage} alt="name" />
+                        </div>
+                    </div>
+                    <Link href={`/project-detail-test?name=${slug}`} as={`/project-detail?name=${slug}`}>
+                        <a>
+                            <div className="project-slider">
+                                <SimpleSlider images={item.detail_images} />
+                            </div>
+                        </a>
+                    </Link>
+                    <Link href={`/project-detail-test?name=${slug}`} as={`/project-detail?name=${slug}`}>
+                        <a>
+                            <div className="project-overlay">
                                 <div className="details-section">
-                                    <h2>{resultdata && resultdata[0]}</h2>
+                                    <h2>{item.project_type}</h2>
+                                    <h2><strong>{item.project_name}</strong></h2>
                                 </div>
                             </div>
-                    </div>
-                })}
-                    
+                            </a>
+                        </Link>
                 </div>
             </div>
         )
     }
 
     render() {
-        console.log('this.state.data', this.state.data)
+        const {data} = this.state;
+        const resultKeys = Object.keys(data) || [];
         return (
             <Fragment>
                 <Head>
@@ -127,9 +129,11 @@ class ProjectList extends Component {
                         <div className="row">
                             <div className="container project-container">
                                 <div className='grid'>
-                                    <Fragment>
-                                        {this.renderProjectList(this.state.data && this.state.data)}
-                                    </Fragment>
+                                    {resultKeys.map(resultKey => (
+                                        <Fragment key={resultKey}>
+                                            {this.renderProjectList(data[resultKey])}
+                                        </Fragment>
+                                    ))}
                                 </div>
                             </div>
                         </div>
